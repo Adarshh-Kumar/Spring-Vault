@@ -51,11 +51,35 @@ public class AccountController {
         return ResponseEntity.ok("Account Blocked Successfully")
     }
 
+/**
+ * Saga step1: Deduct Balance
+ * Clled by Transaction Service when transaction is inititated
+ */
+    @PutMapping("/{accountNumber}/deduct")
+    public ResponseEntity<String> deductBalance{
+        (@PathVariable String accountNumber,
+                @RequestParam BigDecimal amount){
+
+            accountService.deductBalance(accountNumber,amount);
+            return ResponseEntity.ok("Amount deducted Scuccessfully")
+        }
+    }
 
 
+/**
+ * Saga step 4:Compensating transaction endpoint
+ * called by transaction service in two scenarios
+ * 1: FRAUD Detected ->refund sender(undo step 1)
+ * 2:transaction completed ->credit reciever
+ */
 
-
-
+@PutMapping("{accountNumber}/credit")
+public ResponseEntity<String> creditBalance(
+        @PathVariable String accountNumber,
+        @RequestParam BigDecimal amount){
+        accountService.creditBalance(accountNumber,amount);
+        return ResponseEntity.ok("Balance credited successfully")
+}
 
     }
 
