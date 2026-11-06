@@ -1,4 +1,7 @@
 package com.banking.accountservice.repository;
 
-public interface AccountRespository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface AccountRespository extends JpaRepository<Account,String> {
+
 }
